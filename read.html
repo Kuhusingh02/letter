@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#efe4cb" />
+  <title>Your letter — A Letter Forward</title>
+  <meta name="description" content="A letter you wrote to your future self." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Petrona:ital,opsz,wght@1,7..72,500;1,7..72,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>" />
+
+  <style>
+    .read { width: 100%; max-width: 620px; }
+
+    /* --- status / sealed intro --- */
+    .status { text-align: center; }
+    .status__title {
+      font-family: var(--stamp); font-weight: 400;
+      font-size: clamp(1.5rem, 4.6vw, 2.05rem); color: var(--ink);
+      margin: var(--space-lg) 0 var(--space-sm);
+    }
+    .status__sub {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(1.05rem, 3vw, 1.2rem); line-height: 1.55;
+      color: var(--ink-soft); margin: 0 auto var(--space-2xl); max-width: 38ch;
+    }
+    .status__sub strong { color: var(--seal); font-style: normal; font-weight: 600; }
+
+    .envelope--read { width: min(300px, 78vw); margin: 0 auto var(--space-2xl); cursor: pointer; opacity: 1; transform: none; }
+    .envelope--read:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; border-radius: 10px; }
+    .envelope--read .envelope__svg { width: 100%; height: auto; display: block; filter: drop-shadow(var(--shadow-2)); }
+
+    /* break-the-seal animation */
+    .envelope--read.is-opening .wax   { animation: breakSeal .7s var(--ease-out) both; }
+    .envelope--read.is-opening .flap  { animation: flapLift .8s var(--ease-out) .1s both; }
+    .envelope--read.is-opening        { animation: envAway .6s var(--ease-out) .55s both; }
+    @keyframes breakSeal {
+      0%   { transform: rotate(-3deg) scale(1); }
+      45%  { transform: rotate(-3deg) scale(1.14); }
+      100% { transform: rotate(-6deg) scale(1.5); opacity: 0; }
+    }
+    @keyframes flapLift {
+      to { transform: translateY(-10px) rotateX(6deg); opacity: .85; }
+    }
+    @keyframes envAway {
+      to { transform: translateY(14px) scale(.96); opacity: 0; }
+    }
+
+    /* --- the opened letter --- */
+    .paper--read { display: none; }
+    .paper--read.is-shown { display: block; animation: rise .7s var(--ease-out) both; }
+
+    .letterhead {
+      display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-md);
+      font-family: var(--stamp); font-size: .72rem; letter-spacing: .04em; color: var(--ink-soft);
+      padding-bottom: 10px; border-bottom: 1px solid var(--line); margin-bottom: var(--space-xl);
+    }
+    .letter-body {
+      white-space: pre-wrap;
+      font-family: var(--mono); font-size: 1.05rem; line-height: 1.9;
+      color: var(--ink); margin: 0;
+    }
+    .letter-reflection {
+      font-family: var(--serif); font-style: italic; font-size: 1.15rem; line-height: 1.5;
+      color: var(--ink-soft); margin: var(--space-2xl) 0 0;
+      padding-top: var(--space-lg); border-top: 1px solid var(--line);
+    }
+    .letter-reflection .sign__hand { display: block; margin-top: var(--space-sm); font-size: 1.3rem; color: var(--seal); }
+
+    .letter-cta { margin-top: var(--space-2xl); text-align: center; }
+    .letter-cta .btn { text-decoration: none; }
+    .letter-cta__note { font-family: var(--mono); font-size: .82rem; color: var(--ink-faint); margin: var(--space-md) 0 0; }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <main class="stage">
+    <div class="viewport">
+      <div class="read" data-read>
+
+        <!-- loading -->
+        <section class="status" data-state="loading">
+          <p class="status__sub">Finding your letter…</p>
+        </section>
+
+        <!-- sealed: invite to open -->
+        <section class="status" data-state="sealed" hidden>
+          <div class="envelope envelope--read" data-envelope tabindex="0" role="button" aria-label="Break the seal and read your letter">
+            <svg class="envelope__svg" viewBox="0 0 320 220">
+              <defs>
+                <linearGradient id="env-paper" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f6ecd4"/><stop offset="1" stop-color="#e9dcbd"/>
+                </linearGradient>
+                <radialGradient id="wax" cx="38%" cy="34%" r="72%">
+                  <stop offset="0" stop-color="#c4382e"/><stop offset="55%" stop-color="#9e2b25"/><stop offset="100%" stop-color="#741d19"/>
+                </radialGradient>
+              </defs>
+              <rect x="10" y="40" width="300" height="170" rx="10" fill="url(#env-paper)" stroke="#d9c79f" stroke-width="1.5"/>
+              <path d="M10 205 L160 120 L310 205 Z" fill="#efe1c1" stroke="#d9c79f" stroke-width="1"/>
+              <path class="flap" d="M10 44 L160 150 L310 44 Z" fill="#f1e4c6" stroke="#d9c79f" stroke-width="1.5" style="transform-box:fill-box;transform-origin:top center"/>
+              <g transform="translate(160 132)">
+                <g class="wax" style="transform-box:fill-box;transform-origin:center;transform:rotate(-3deg)">
+                  <path fill="url(#wax)" d="M0-32C10-32 15-27 22-24 30-21 33-14 31-5 30 3 34 9 30 17 26 24 18 24 10 28 3 31-3 31-11 28-19 24-27 24-31 17-35 9-31 2-32-5-34-14-30-21-22-24-15-27-10-32 0-32Z"/>
+                  <circle r="24" fill="none" stroke="#741d19" stroke-width="1.4" opacity=".55"/>
+                  <path fill="#b83227" d="M0 16C-14 6-22-2-22-11-22-18-16-22-10-22-5-22-2-19 0-16 2-19 5-22 10-22 16-22 22-18 22-11 22-2 14 6 0 16Z"/>
+                  <path fill="#ffffff" opacity=".14" d="M-8-18C-2-22 6-21 10-16 4-19-3-18-8-13Z"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <h1 class="status__title">A letter's been waiting for you.</h1>
+          <p class="status__sub">You wrote it to yourself on <strong data-written>—</strong>. Tap the seal to open it.</p>
+        </section>
+
+        <!-- opened: the letter -->
+        <section class="sheet paper--read" data-state="open">
+          <div class="letterhead">
+            <span>a letter forward</span>
+            <span data-written-2>—</span>
+          </div>
+          <p class="letter-body" data-body></p>
+          <div class="letter-reflection" data-reflection hidden>
+            <span data-reflection-text></span>
+            <span class="sign__hand">— Amber</span>
+          </div>
+          <div class="letter-cta">
+            <a class="btn btn--primary" href="https://www.ambermind.ai/?utm_source=freebie&amp;utm_medium=letter&amp;utm_campaign=lettertoself" target="_blank" rel="noopener">Keep writing with Amber</a>
+            <p class="letter-cta__note">by ambermind.ai — a journal that talks back</p>
+          </div>
+        </section>
+
+        <!-- error -->
+        <section class="status" data-state="error" hidden>
+          <h1 class="status__title" data-err-title>We couldn't find that letter.</h1>
+          <p class="status__sub" data-err-sub>The link may be broken or the letter may have been removed.</p>
+          <a class="btn btn--ghost" href="./">Write a new one</a>
+        </section>
+
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <span class="logo logo--xs" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="#ec6a1e"/><path d="M30 64C22 58 20 44 32 37 46 29 63 32 70 43 75 51 71 59 62 58 55 57 52 49 57 42 61 36 56 27 50 32 44 37 47 50 43 59 40 66 30 67 29 59 28 53 34 51 38 56 44 62 54 63 62 58 72 52 80 57 86 52" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="page-footer__text">by <a href="https://www.ambermind.ai/?utm_source=freebie&amp;utm_medium=letter&amp;utm_campaign=lettertoself" target="_blank" rel="noopener">ambermind.ai</a> — a journal that talks back</span>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      var API = "https://giwtvsalstlbyzjlvtbk.supabase.co/functions/v1/read-letter";
+      var prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var $ = function (s) { return document.querySelector(s); };
+
+      function state(name) {
+        document.querySelectorAll("[data-state]").forEach(function (el) {
+          el.hidden = el.dataset.state !== name;
+        });
+      }
+      function prettyDate(iso) {
+        var d = new Date(iso);
+        return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      }
+
+      var id = new URLSearchParams(location.search).get("id") || "";
+      if (!id) { showError("This link is missing its letter.", "Open the link straight from your email."); return; }
+
+      fetch(API + "?id=" + encodeURIComponent(id))
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
+        .then(function (res) {
+          if (res.status === 403 && res.j.error === "not_yet") {
+            showError("This letter isn't ready yet.", "It opens on " + prettyDate(res.j.arrive_date) + ".");
+            return;
+          }
+          if (!res.ok) { showError("We couldn't find that letter.", "The link may be broken or the letter removed."); return; }
+          render(res.j);
+        })
+        .catch(function () { showError("Something went wrong.", "Check your connection and refresh."); });
+
+      function showError(title, sub) {
+        $("[data-err-title]").textContent = title;
+        $("[data-err-sub]").textContent = sub;
+        state("error");
+      }
+
+      function render(letter) {
+        var written = prettyDate(letter.written);
+        $("[data-written]").textContent = written;
+        $("[data-written-2]").textContent = "written " + written;
+        $("[data-body]").textContent = letter.body;
+        if (letter.reflection) {
+          $("[data-reflection-text]").textContent = "“" + letter.reflection + "”";
+          $("[data-reflection]").hidden = false;
+        }
+        state("sealed");
+
+        var env = $("[data-envelope]");
+        function open() {
+          if (env.dataset.done) return;
+          env.dataset.done = "1";
+          if (prefersReduced) { reveal(); return; }
+          env.classList.add("is-opening");
+          setTimeout(reveal, 900);
+        }
+        function reveal() {
+          state("open");
+          $("[data-state='open']").classList.add("is-shown");
+          window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
+        }
+        env.addEventListener("click", open);
+        env.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
