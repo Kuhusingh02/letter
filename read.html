@@ -60,6 +60,9 @@
       font-family: var(--stamp); font-size: .72rem; letter-spacing: .04em; color: var(--ink-soft);
       padding-bottom: 10px; border-bottom: 1px solid var(--line); margin-bottom: var(--space-xl);
     }
+    @media (max-width: 480px) {
+      .letterhead { flex-direction: column; gap: 3px; align-items: flex-start; }
+    }
     .letter-body {
       white-space: pre-wrap;
       font-family: var(--mono); font-size: 1.05rem; line-height: 1.9;
@@ -194,10 +197,13 @@
         state("error");
       }
 
+      function shortDate(iso) {
+        return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      }
       function render(letter) {
         var written = prettyDate(letter.written);
         $("[data-written]").textContent = written;
-        $("[data-written-2]").textContent = "written " + written;
+        $("[data-written-2]").textContent = "written " + shortDate(letter.written) + " · arrived " + shortDate(letter.arrive);
         $("[data-body]").textContent = letter.body;
         if (letter.reflection) {
           $("[data-reflection-text]").textContent = "“" + letter.reflection + "”";
